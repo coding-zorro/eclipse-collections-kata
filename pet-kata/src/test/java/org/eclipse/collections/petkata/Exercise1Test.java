@@ -26,44 +26,36 @@ import org.junit.Test;
  *
  * @see <a href="http://eclipse.github.io/eclipse-collections-kata/pet-kata/#/2">Exercise 1 Slides</a>
  */
-public class Exercise1Test extends PetDomainForKata
-{
-    @Test
-    public void getFirstNamesOfAllPeople()
-    {
-        // Replace null, with a transformation method on MutableList.
-        MutableList<String> firstNames = null; // this.people...
+public class Exercise1Test extends PetDomainForKata {
 
-        var expectedFirstNames = Lists.mutable.with("Mary", "Bob", "Ted", "Jake", "Barry", "Terry", "Harry", "John");
+    @Test
+    public void getFirstNamesOfAllPeople() {
+        MutableList<String> firstNames = this.people.collect(Person::getFirstName);
+        var expectedFirstNames = Lists.mutable.with("Mary", "Bob", "Ted", "Jake", "Barry",
+                "Terry", "Harry", "John");
         Assert.assertEquals(expectedFirstNames, firstNames);
     }
 
     @Test
-    public void getNamesOfMarySmithsPets()
-    {
-        Person person = this.getPersonNamed("Mary Smith");
-        MutableList<Pet> pets = person.getPets();
+    public void getNamesOfMarySmithsPets() {
+        Person marySmith = this.getPersonNamed("Mary Smith");
+        MutableList<Pet> pets = marySmith.getPets();
 
-        // Replace null, with a transformation method on MutableList.
-        MutableList<String> names = null; // pets...
+        MutableList<String> names = pets.collect(Pet::getName);
 
         Assert.assertEquals("Tabby", names.makeString());
     }
 
     @Test
-    public void getPeopleWithCats()
-    {
-        // Replace null, with a positive filtering method on MutableList.
-        MutableList<Person> peopleWithCats = null;  // this.people...
+    public void getPeopleWithCats() {
+        MutableList<Person> peopleWithCats = this.people.select(person -> person.hasPet(PetType.CAT));
 
         Verify.assertSize(2, peopleWithCats);
     }
 
     @Test
-    public void getPeopleWithoutCats()
-    {
-        // Replace null, with a negative filtering method on MutableList.
-        MutableList<Person> peopleWithoutCats = null;  // this.people...
+    public void getPeopleWithoutCats() {
+        MutableList<Person> peopleWithoutCats = this.people.reject(person -> person.hasPet(PetType.CAT));
 
         Verify.assertSize(6, peopleWithoutCats);
     }
