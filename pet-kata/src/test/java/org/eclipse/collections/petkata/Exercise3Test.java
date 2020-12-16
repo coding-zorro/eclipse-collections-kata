@@ -40,14 +40,11 @@ import org.junit.Test;
  *
  * @see <a href="http://eclipse.github.io/eclipse-collections-kata/pet-kata/#/6">Exercise 3 Slides</a>
  */
-public class Exercise3Test extends PetDomainForKata
-{
+public class Exercise3Test extends PetDomainForKata {
     @Test
-    public void getCountsByPetType()
-    {
+    public void getCountsByPetType() {
         MutableList<PetType> petTypes = this.people.flatCollect(Person::getPets).collect(Pet::getType);
 
-        // Do you recognize this pattern?
         MutableMap<PetType, Integer> petTypeCounts = Maps.mutable.empty();
         for (PetType petType : petTypes)
         {
@@ -67,7 +64,8 @@ public class Exercise3Test extends PetDomainForKata
         Assert.assertEquals(Integer.valueOf(1), petTypeCounts.get(PetType.BIRD));
 
         // Hint: use the appropriate method on this.people to create a Bag<PetType>
-        Bag<PetType> counts = null;
+        MutableBag<PetType> counts = this.people.flatCollect(Person::getPets).countBy(Pet::getType);
+
         Assert.assertEquals(2, counts.occurrencesOf(PetType.CAT));
         Assert.assertEquals(2, counts.occurrencesOf(PetType.DOG));
         Assert.assertEquals(2, counts.occurrencesOf(PetType.HAMSTER));
@@ -95,7 +93,7 @@ public class Exercise3Test extends PetDomainForKata
         Verify.assertIterableSize(3, lastNamesToPeople.get("Smith"));
 
         // Hint: use the appropriate method on this.people to create a Multimap<String, Person>
-        Multimap<String, Person> byLastNameMultimap = null;
+        Multimap<String, Person> byLastNameMultimap = this.people.groupBy(Person::getLastName);
 
         Verify.assertIterableSize(3, byLastNameMultimap.get("Smith"));
     }
@@ -131,7 +129,7 @@ public class Exercise3Test extends PetDomainForKata
 
         // Hint: use the appropriate method on this.people with a target collection to create a MutableSetMultimap<String, Person>
         // Hint: this.people is a MutableList, so it will return a MutableListMultimap without a target collection
-        MutableSetMultimap<PetType, Person> multimap = null;
+        MutableSetMultimap<PetType, Person> multimap = this.people.groupByEach(Person::getPetTypes, Multimaps.mutable.set.empty());
 
         Verify.assertIterableSize(2, multimap.get(PetType.CAT));
         Verify.assertIterableSize(2, multimap.get(PetType.DOG));
